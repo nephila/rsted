@@ -2,6 +2,7 @@
 # all the imports
 
 import os, sys
+import logging
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -14,7 +15,7 @@ from flaskext.redis import RedisManager
 from flaskext.helpers import render_html
 
 # handle relative path references by changing to project directory
-run_from = os.path.dirname(os.path.abspath(sys.argv[0]))
+run_from = os.path.dirname(__file__)
 if run_from != os.path.curdir:
     os.chdir(run_from)
 
@@ -65,6 +66,7 @@ def rst2html():
         html = _rst2html(rst, theme=theme)
     except Exception as ex:
         html = "Generation FAILED due to: %s" % ex
+        logging.exception(ex)
     return html
 
 @app.route('/srv/rst2pdf/', methods=['POST'])

@@ -4,6 +4,8 @@ flask
 redis
 rst2pdf
 
+Pillow
+roman
 # Docutils (for rst2html)
 docutils==0.12
 
