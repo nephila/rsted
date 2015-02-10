@@ -61,7 +61,10 @@ def rst2html():
     theme = request.form.get('theme')
     if theme == 'basic':
         theme = None
-    html = _rst2html(rst, theme=theme)
+    try:
+        html = _rst2html(rst, theme=theme)
+    except Exception as ex:
+        html = "Generation FAILED due to: %s" % ex
     return html
 
 @app.route('/srv/rst2pdf/', methods=['POST'])

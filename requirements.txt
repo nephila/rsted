@@ -1,7 +1,9 @@
+gunicorn
 flup
 flask
 redis
 rst2pdf
 
 # Docutils (for rst2html)
-docutils
+docutils==0.12
+
