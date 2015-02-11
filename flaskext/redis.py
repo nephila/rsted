@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import os
+from urllib import parse as urlparse
 import redis
 from flask import g
 
@@ -16,11 +18,17 @@ class RedisManager(object):
         """
         Used to initialize redis with app object
         """
+        
+        ## Redis To Go on Heroku
+        #     see: http://stackoverflow.com/questions/10598641/the-herokus-python-doesnt-find-redisredistogo-for-import
+        #
+        redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
+            
 
-        app.config.setdefault('REDIS_HOST', 'localhost')
-        app.config.setdefault('REDIS_PORT', 6379)
+        app.config.setdefault('REDIS_HOST', redis_url.hostname)
+        app.config.setdefault('REDIS_PORT', redis_url.port)
         app.config.setdefault('REDIS_DB', 0)
-        app.config.setdefault('REDIS_PASSWORD', None)
+        app.config.setdefault('REDIS_PASSWORD', redis_url.password)
 
         self.app = app
         self._connect()
