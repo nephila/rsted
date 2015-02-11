@@ -2,10 +2,13 @@
 # all the imports
 
 import os, sys
-import logging
-reload(sys)
-sys.setdefaultencoding('utf-8')
+try:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+except:
+    pass
 
+import logging
 from flask import Flask, request, render_template, make_response, url_for
 
 from rsted.html import rst2html as _rst2html
@@ -65,7 +68,7 @@ def rst2html():
     try:
         html = _rst2html(rst, theme=theme)
     except Exception as ex:
-        html = "Generation FAILED due to: %s" % ex
+        html = "<h1>Generation FAILED!</h1>\n<p>%s" % ex
         logging.exception(ex)
     return html
 

@@ -1,8 +1,9 @@
 gunicorn
-flup
+#flup PY3
 flask
 redis
-rst2pdf
+#rst2pdf PY3
+git+git://github.com/aquavitae/rst2pdf.git
 
 Pillow
 roman
