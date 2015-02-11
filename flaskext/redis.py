@@ -1,6 +1,10 @@
 from __future__ import absolute_import
 import os
-from urllib import parse as urlparse
+try:
+    import urlparse ## PY2
+except ImportError:
+    from urllib import parse as urlparse ## PY3
+    
 import redis
 from flask import g
 
