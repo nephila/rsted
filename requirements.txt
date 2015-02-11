@@ -1,9 +1,9 @@
 gunicorn
-#flup PY3
+#flup        ## PY2 only
 flask
 redis
-#rst2pdf PY3
-git+git://github.com/aquavitae/rst2pdf.git
+rst2pdf     ## PY2 only
+#git+git://github.com/aquavitae/rst2pdf.git  ## PY3
 
 Pillow
 roman

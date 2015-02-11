@@ -94,7 +94,7 @@ def save_rst():
 
     from hashlib import md5
 
-    md5sum = md5(rst).hexdigest()
+    md5sum = md5(rst.encode('utf-8')).hexdigest()
     redis_key = '%s%s' % (REDIS_PREFIX, md5sum)
 
     if redis.setnx(redis_key, rst) and REDIS_EXPIRE:
