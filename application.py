@@ -16,6 +16,7 @@ from rsted.pdf import rst2pdf as _rst2pdf
 
 from flaskext.redis import RedisManager
 from flaskext.helpers import render_html
+from hashlib import md5
 
 # handle relative path references by changing to project directory
 run_from = os.path.dirname(__file__)
@@ -53,6 +54,7 @@ def index():
     if saved_doc_id:
         rst = redis.get('%s%s' % (REDIS_PREFIX, saved_doc_id))
         if rst:
+            rst = rst.decode('utf-8')
             yield 'rst', rst
             yield 'document', saved_doc_id
 
@@ -92,9 +94,9 @@ def save_rst():
     if not rst:
         return ''
 
-    from hashlib import md5
-
-    md5sum = md5(rst.encode('utf-8')).hexdigest()
+    rst = rst.encode('utf-8')
+    
+    md5sum = md5(rst).hexdigest()
     redis_key = '%s%s' % (REDIS_PREFIX, md5sum)
 
     if redis.setnx(redis_key, rst) and REDIS_EXPIRE:

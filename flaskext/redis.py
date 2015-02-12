@@ -6,7 +6,6 @@ except ImportError:
     from urllib import parse as urlparse ## PY3
     
 import redis
-from flask import g
 
 class RedisManager(object):
 
