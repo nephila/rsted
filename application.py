@@ -63,11 +63,8 @@ def about():
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
 def rst2html():
     rst = request.form.get('rst', '')
-    theme = request.form.get('theme')
-    if theme == 'basic':
-        theme = None
     try:
-        html = _rst2html(rst, theme=theme)
+        html = _rst2html(rst)
     except Exception as ex:
         html = "<h1>Generation FAILED!</h1>\n<p>%s" % ex
         logging.exception(ex)
@@ -76,12 +73,14 @@ def rst2html():
 @app.route('/srv/rst2pdf/', methods=['POST'])
 def rst2pdf():
     rst = request.form.get('rst', '')
-    theme = request.form.get('theme')
-    if theme == 'basic':
-        theme = None
+    pdf = _rst2pdf(rst)
+    try:
+        responce = make_response(pdf)
+    except Exception as ex:
+        html = "<h1>Generation FAILED!</h1>\n<p>%s" % ex
+        logging.exception(ex)
+        return make_response(html)
 
-    pdf = _rst2pdf(rst, theme=theme)
-    responce = make_response(pdf)
     responce.headers['Content-Type'] = 'application/pdf'
     responce.headers['Content-Disposition'] = 'attachment; filename="rst.pdf"'
     responce.headers['Content-Transfer-Encoding'] = 'binary'

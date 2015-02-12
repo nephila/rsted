@@ -8,7 +8,7 @@ import re
 
 regex_html = re.compile('<html.*</html>', re.DOTALL)
 
-def rst2html(rst_txt, theme=None, opts=None):
+def rst2html(rst_txt):
     if not rst_txt.strip():
         return "<html/>"
 
