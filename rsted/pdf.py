@@ -1,24 +1,31 @@
-from rst2pdf.createpdf import RstToPdf
-import codecs
-utf8codec = codecs.lookup('utf-8')
 
-from flask import current_app
+import os
+from os.path import join as J
+import tempfile
+import subprocess
+import shutil
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    try:
-        from StringIO import StringIO
-    except ImportError:
-        from io import StringIO
 
-def rst2pdf(content, theme=None):
-    topdf = RstToPdf(basedir=current_app.config.root_path, breaklevel=0)
+def rst2pdf(rst_txt, theme=None, opts=None):
+    if not rst_txt.strip():
+        return "<html/>"
 
-    buf = StringIO()
-    if not content:
-        content = '\0'
-    content_utf8 = utf8codec.encode(content)[0]
-    topdf.createPdf(text=content_utf8, output=buf, compressed=False)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        copy_src = os.path.join(os.path.dirname(__file__), '..', 'sphinx', 'conf.py')
+        rst_fname = os.path.join(tmpdir, 'index.rst')
+        htm_fname = os.path.join(tmpdir, 'index.html')
+        cmd_args = "sphinx-build -b html  . .".split()
 
-    return buf.getvalue()
+        shutil.copy(copy_src, tmpdir)
+        with open(rst_fname, "w", encoding="utf-8") as fout_rst:
+            fout_rst.write(rst_txt)
+        
+        subprocess.check_call(cmd_args, cwd=tmpdir)
+        #with Popen(cmd_args, cwd=tmpdir):
+        
+        with open(htm_fname, encoding="utf-8") as fin_html:
+            html = fin_html.read()
+            
+        return html
+        
+

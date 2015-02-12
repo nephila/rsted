@@ -23,7 +23,8 @@ if run_from != os.path.curdir:
     os.chdir(run_from)
 
 # create our little application :)
-app = Flask(__name__)
+STATIC_URL = '/_static'  ## For sphinx to wlak alone
+app = Flask(__name__, static_path=STATIC_URL)
 app.config.from_pyfile(os.environ.get('RSTED_CONF', 'settings.py'))
 redis = RedisManager(app).get_instance()
 
@@ -39,7 +40,7 @@ def view_is_active(view_name):
 @app.context_processor
 def ctx_pro():
     return {
-        'MEDIA_URL': '/static/',
+        'MEDIA_URL': STATIC_URL + '/',
         'is_active': view_is_active
     }
 
