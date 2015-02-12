@@ -5,6 +5,7 @@ import tempfile
 import subprocess
 import shutil
 import re
+import logging
 
 regex_html = re.compile('<html.*</html>', re.DOTALL)
 
@@ -24,7 +25,8 @@ def rst2html(rst_txt):
         with open(rst_fname, "w", encoding="utf-8") as fout_rst:
             fout_rst.write(rst_txt)
         
-        subprocess.check_output(cmd_args, cwd=copy_dst)
+        out = subprocess.check_output(cmd_args, cwd=copy_dst)
+        logging.log(logging.INFO, out.decode('utf-8'))
         
         with open(htm_fname, encoding="utf-8") as fin_html:
             html = fin_html.read()

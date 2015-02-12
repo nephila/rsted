@@ -4,6 +4,7 @@ from os.path import join as J
 import tempfile
 import subprocess
 import shutil
+import logging
 
 
 def rst2pdf(rst_txt):
@@ -23,8 +24,10 @@ def rst2pdf(rst_txt):
         with open(rst_fname, "w", encoding="utf-8") as fout_rst:
             fout_rst.write(rst_txt)
         
-        subprocess.check_output(cmd1_args, cwd=copy_dst)
-        subprocess.check_output(cmd2_args, cwd=copy_dst)
+        out = subprocess.check_output(cmd1_args, cwd=copy_dst)
+        logging.log(logging.INFO, out.decode('utf-8'))
+        out = subprocess.check_output(cmd2_args, cwd=copy_dst)
+        logging.log(logging.INFO, out.decode('utf-8'))
         
         with open(pdf_fname, 'rb') as fin_pdf:
             pdf = fin_pdf.read()

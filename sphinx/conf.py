@@ -27,7 +27,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'sphined_generated'
+project = 'WLTP'
 copyright = '2013-2015, European Commission (JRC), EUPL 1.1+'  # @ReservedAssignment
 
 version = proj_ver
@@ -36,6 +36,12 @@ release = proj_ver
 extlinks = {
 #     'issue': ('https://github.com/ankostis/wltp/issues/%s','issue')
 }
+
+rst_prolog = '''\
+^^^^^^^^
+  WLTP
+^^^^^^^^
+'''
 
 exclude_patterns = ['_build']#, '_static']
 
@@ -131,7 +137,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'sphinxed.tex', 'Sphinxed generated',
+  ('index', 'sphinxed.tex', 'WLTP',
    "Anyone' section", 'manual'),
 ]
 
