@@ -7,7 +7,10 @@ from flask import current_app
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    try:
+        from StringIO import StringIO
+    except ImportError:
+        from io import StringIO
 
 def rst2pdf(content, theme=None):
     topdf = RstToPdf(basedir=current_app.config.root_path, breaklevel=0)

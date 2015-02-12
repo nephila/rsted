@@ -19,7 +19,7 @@
         {% endblock %}
     </head>
     <body>
-        <a id="github-ribbon" href="http://github.com/anru/rsted">Fork me on GitHub</a>
+        <a id="github-ribbon" href="http://github.com/ankostis/rsted">Fork me on GitHub</a>
         {% block body_head %}
         {% endblock %}
         <header id="header">
@@ -29,7 +29,7 @@
                 <ul class="menu" id="menu">
                     <li class="{{ is_active('index') }}"><a href="{{ url_for('index') }}">Editor</a>
                     </li>
-                    <li class="{{ is_active('about') }}"><a href="{{ url_for('about') }}">About</a></li>
+                    <li class="{{ is_active('about') }}"><a target="_blank" href="{{ url_for('about') }}">About</a></li>
                 </ul>
                 {% endblock -%}
             </menu>
