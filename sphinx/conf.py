@@ -4,7 +4,7 @@
 
 import sys, os, io
 
-proj_ver = "0.0.1"
+proj_ver = "Phase-1b"
 mydir = os.path.dirname(__file__)
 
 extensions = [
@@ -138,7 +138,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'sphinxed.tex', 'WLTP',
-   "Anyone' section", 'manual'),
+   'GS-TF', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -159,7 +159,7 @@ latex_documents = [
 #latex_appendices = []
 
 # If false, no module index is generated.
-#latex_domain_indices = True
+latex_domain_indices = False
 
 
 
