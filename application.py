@@ -52,6 +52,7 @@ def index():
     if saved_doc_id:
         rst = redis.get('%s%s' % (REDIS_PREFIX, saved_doc_id))
         if rst:
+            rst = rst.decode('utf-8')
             yield 'rst', rst
             yield 'document', saved_doc_id
 
@@ -92,9 +93,10 @@ def save_rst():
     if not rst:
         return ''
 
+    rst = rst.encode('utf-8')
     from hashlib import md5
 
-    md5sum = md5(rst.encode('utf-8')).hexdigest()
+    md5sum = md5(rst).hexdigest()
     redis_key = '%s%s' % (REDIS_PREFIX, md5sum)
 
     if redis.setnx(redis_key, rst) and REDIS_EXPIRE:
