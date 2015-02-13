@@ -48,7 +48,7 @@ def ctx_pro():
 @app.route("/")
 @render_html('index.html')
 def index():
-    yield 'js_params', {'theme': request.args.get('theme', '')}
+    yield 'js_params', {}
 
     saved_doc_id = request.args.get('n')
     if saved_doc_id:

@@ -13,9 +13,6 @@
 <script type="text/javascript">
     var js_params = {{ js_params|tojson|safe }};
 	$(function() {
-	    if (js_params.theme) {
-	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
-	    }
 	    if (js_params.rst) {
 	        $('#editor').val(js_params.rst);
 	    }
@@ -51,10 +48,6 @@
     </div>
     <div class="b_page_right">
         <div class="right_nav">
-            <div class="themes left" id="themes">Theme:
-                <input id="t_basic" type="radio" value="basic" checked="checked" name="style"/><label for="t_basic">Basic</label>
-                <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
-            </div>
             <div class="actions right">
                 <button id="as_pdf" class="jslink">Download as PDF</button>
                 <button id="save_link">Save with unique link</button>
@@ -73,7 +66,6 @@
 
 <form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">
     <input type="hidden" id="as_pdf_rst" name="rst" />
-    <input type="hidden" id="as_pdf_theme" name="theme"/>
 </form>
 
 {% endblock %}

@@ -119,9 +119,9 @@ var timerId = null;
 
 function getCurrentLink(res) {
     if (!res) {
-        return '//' + window.location.host + script_root + '/?theme=' + getSelectedTheme();
+        return '//' + window.location.host + script_root;
     }
-    return '//' + window.location.host + script_root + '/?n=' + res + '&theme=' + getSelectedTheme();
+    return '//' + window.location.host + script_root + '/?n=' + res;
 }
 
 function adjustBrowse() {
