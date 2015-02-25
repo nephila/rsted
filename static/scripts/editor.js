@@ -61,7 +61,11 @@ function getScrollHeight($prevFrame) {
                $prevFrame.find('html')[0].scrollHeight !== 0) {
         return $prevFrame.find('html')[0].scrollHeight;
     } else {
-        return $prevFrame.find('body')[0].scrollHeight;
+        try {
+            return $prevFrame.find('body')[0].scrollHeight;
+        } catch(err) {
+            return 0;
+        }
     }
 }
 
@@ -127,7 +131,7 @@ function getCurrentLink(res) {
 function adjustBrowse() {
     var h = $('body').height() - $('#browse').offset().top - $('#footer').outerHeight() - 7;
     $('#browse').height(h);
-    h -= 12;
+    h += 18;
     $('#editor').height(h).css('max-height', h + 'px');
 }
 
@@ -137,11 +141,11 @@ $(function() {
 
     window.baseTitle = $('head title').text();
 
-    $('textarea#editor').bind('change', genPreview).markItUp(mySettings);
-    timerId = window.setInterval(genPreview, 900);
+    ////$('textarea#editor').bind('change', genPreview).markItUp(mySettings);
+    timerId = window.setInterval(genPreview, 2000);
     window.setTimeout(function() {
         $('#editor-td > div').css({'width': '100%', 'height': '96%'});
-    }, 200);
+    }, 500);
 
     $('textarea#editor').scroll(syncScrollPosition);
 
