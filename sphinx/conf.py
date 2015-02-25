@@ -130,7 +130,8 @@ latex_elements = {
 #'preamble': '',
 'preamble': u'''
     \\usepackage{amsmath}
-''',
+    \\usepackage{mathtools}
+''',   ## mathtools: From http://tex.stackexchange.com/questions/4216/how-to-typeset-correctly
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
