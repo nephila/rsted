@@ -6,3 +6,4 @@
 .settings
 .tmp*
 /var/run
+/projects/

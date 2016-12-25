@@ -46,6 +46,12 @@
 
 {% block content %}
 <div class="b_page_cont">
+    <div class="b_page_files"ì>
+        <input id="filename" name="name" placeholder="filename">
+        <h3 id="project"></h3>
+        <ul id="file-list">
+        </ul>
+    </div>
     <div class="b_page_left">
         <textarea id="editor" rows="15">{{ rst }}</textarea>
     </div>
@@ -57,6 +63,7 @@
             </div>
             <div class="actions right">
                 <button id="as_pdf" class="jslink">Download as PDF</button>
+                <button id="save_file">Save to file</button>
                 <button id="save_link">Save with unique link</button>
                 {% if document %}
                 <button id="del_link">Delete</button>
@@ -67,8 +74,6 @@
 
 	<iframe src="{{ request.script_root }}/srv/rst2html/" id="browse"></iframe>
     </div>
-</div>
-
 </div>
 
 <form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">

@@ -1,11 +1,21 @@
 
-.b_page_cont, .b_page_left  {
+.b_page_cont {
     position: relative;
 }
 
-.b_page_left {
+.b_page_left, .b_page_files  {
+    position: absolute;
+}
+
+.b_page_files {
     display: block;
-    width: 48.5%;
+    width: 15%;
+}
+
+.b_page_left {
+    margin-left: 16%;
+    display: block;
+    width: 41%;
 }
 
 .b_page_center {
@@ -15,8 +25,7 @@
 }
 
 .b_page_right {
-    margin-left: 50%;
-    position: absolute;
+    margin-left: 59%;
     left: 0;
     right: 0;
     top: 0;

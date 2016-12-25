@@ -11,7 +11,7 @@ HOST = "0.0.0.0"  ## Listen IP
                   ## 0.0.0.0   is open to everyone,
                   ## 127.0.0.1 is localhost only.
 PORT = 5000
-
+FILES_DIR = 'projects'
 
 try:
     from settings_local import *

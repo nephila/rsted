@@ -1,12 +1,10 @@
 gunicorn
-#flup        ## PY2 only
-flask
 redis
 #rst2pdf    ## PY2 only
-git+git://github.com/ankostis/rst2pdf.git       ## Originally for PY3 from aquavitae.
+git+git://github.com/ankostis/rst2pdf.git       ## Originally for PY3 from aquavitae.flask
+flask
 
-
-#Pillow     ## Probably already installed, with pip: no zlib
+Pillow
 #matplotlib ## Too slow!
 roman
 docutils==0.12

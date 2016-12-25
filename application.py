@@ -9,7 +9,7 @@ except:
     pass
 
 import logging
-from flask import Flask, request, render_template, make_response, url_for
+from flask import Flask, request, render_template, make_response, url_for, jsonify
 
 from rsted.html import rst2html as _rst2html
 from rsted.pdf import rst2pdf as _rst2pdf
@@ -29,6 +29,7 @@ redis = RedisManager(app).get_instance()
 
 REDIS_EXPIRE = app.config.setdefault('REDIS_EXPIRE', 60*60*24*30*6) # Default 6 months
 REDIS_PREFIX = app.config.setdefault('REDIS_PREFIX', 'rst_')
+FILES_DIR = app.config.setdefault('FILES_DIR', 'files')
 
 
 def view_is_active(view_name):
@@ -104,6 +105,52 @@ def save_rst():
     response = make_response(md5sum)
     response.headers['Content-Type'] = 'text/plain'
     return response
+
+@app.route('/srv/save_file/', methods=['POST'])
+def save_file():
+    rst = request.form.get('rst')
+    project = request.form.get('project')
+    filename = request.form.get('filename')
+    if not rst:
+        return ''
+    if not project:
+        return ''
+    if not filename:
+        return ''
+
+    file_path = os.path.join(FILES_DIR, project, filename + '.rst')
+    with open(file_path, 'w') as rst_obj:
+        rst_obj.write(rst)
+    return jsonify(*get_project_files(project))
+
+@app.route('/srv/load_file/', methods=['GET'])
+def load_file():
+    project = request.args.get('project')
+    filename = request.args.get('filename')
+    if not project:
+        return ''
+    if not filename:
+        return ''
+
+    file_path = os.path.join(FILES_DIR, project, filename + '.rst')
+    with open(file_path, 'r') as rst_obj:
+        content = rst_obj.read()
+    print(file_path, content)
+    return jsonify(**{'content': content})
+
+def get_project_files(project):
+    project_dir = os.path.join(FILES_DIR, project)
+    os.makedirs(project_dir, exist_ok=True)
+    content = os.listdir(project_dir)
+    return [item[:-4] for item in content if item.endswith('.rst')]
+
+@app.route('/srv/files/', methods=['GET'])
+def files_list():
+    project = request.args.get('project')
+    if not project:
+        return ''
+
+    return jsonify(**{'files': get_project_files(project)})
 
 @app.route('/srv/del_rst/', methods=['GET'])
 def del_rst():

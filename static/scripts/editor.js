@@ -118,10 +118,11 @@ function genPreview() {
 var timerId = null;
 
 function getCurrentLink(res) {
+
     if (!res) {
-        return '//' + window.location.host + script_root + '/?theme=' + getSelectedTheme();
+        return '//' + window.location.host + script_root + '/?theme=' + getSelectedTheme() + '&project=' + $.urlParam('project');
     }
-    return '//' + window.location.host + script_root + '/?n=' + res + '&theme=' + getSelectedTheme();
+    return '//' + window.location.host + script_root + '/?n=' + res + '&theme=' + getSelectedTheme() + '&project=' + $.urlParam('project');
 }
 
 function adjustBrowse() {
@@ -131,6 +132,15 @@ function adjustBrowse() {
     $('#editor').height(h).css('max-height', h + 'px');
 }
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
 
 $(function() {
     //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
@@ -148,6 +158,54 @@ $(function() {
     $('.themes input').bind('change', function() {
         lastContent = null;
         genPreview();
+    });
+
+    $.ajax({
+        'url': script_root + '/srv/files/',
+        'type': 'GET',
+        'data': {'project': $.urlParam('project')},
+        'success': function(response) {
+            $("#project").html($.urlParam('project'));
+            for(item of response['files']) {
+                $('#file-list').append('<li>' + item + '</li>');
+            }
+        }
+
+    });
+
+    $('body').on('click', '#file-list li', function(e){
+        $.ajax({
+            'url': script_root + '/srv/load_file/',
+            'type': 'GET',
+            'data': {'project': $.urlParam('project'), 'filename': e.target.innerHTML},
+            'success': function(response) {
+                $("#filename").val(e.target.innerHTML);
+                $('textarea#editor').val(response['content']);
+            }
+        })
+    });
+
+    $('#save_file').click(function(e) {
+        if(!$('#filename').val()) {
+            alert('Provide a file name!');
+        }
+        if(!$.urlParam('project')) {
+            alert('Provide a project!');
+        }
+        $.ajax({
+            'url': script_root + '/srv/save_file/',
+            'type': 'POST',
+            'data': {'rst': $('textarea#editor').val(), 'project': $.urlParam('project'), 'filename': $('#filename').val()},
+            'success': function(response) {
+                for(item of response['files']) {
+                    $('#file-list').append('<li>' + item + '</li>');
+                }
+            }
+
+        });
+
+        e.preventDefault();
+        return false;
     });
 
     $('#save_link').click(function(e) {
