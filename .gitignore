@@ -7,3 +7,4 @@
 .tmp*
 /var/run
 /projects/
+log

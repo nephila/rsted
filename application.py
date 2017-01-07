@@ -18,7 +18,7 @@ from flaskext.redis import RedisManager
 from flaskext.helpers import render_html
 
 # handle relative path references by changing to project directory
-run_from = os.path.dirname(__file__)
+run_from = os.path.dirname(os.path.abspath(__file__))
 if run_from != os.path.curdir:
     os.chdir(run_from)
 
