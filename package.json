@@ -1,0 +1,24 @@
+{
+  "name": "rsted",
+  "version": "0.1.0",
+  "description": "online rest editor",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nephila/rsted.git"
+  },
+  "author": "Iacopo Spalletti <i.spalletti@nephila.it>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nephila/rsted/issues"
+  },
+  "homepage": "https://github.com/nephila/rsted#readme",
+  "devDependencies" : {
+    "gulp" : "~=3.9",
+    "gulp-sass" : "~=3.0",
+    "gulp-sourcemaps" : "~=1.9",
+    "gulp-autoprefixer" : "~=3.1"
+  }
+}

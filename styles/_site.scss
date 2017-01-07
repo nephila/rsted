@@ -54,3 +54,54 @@
     width: 100%;
     resize: vertical;
 }
+
+
+.b_page_files h2 {
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
+.b_page_files h3 {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+}
+
+.b_page_files h4 {
+    margin-top: 1em;
+    margin-bottom: 0em;
+}
+
+.b_page_files ul {
+    padding: 0;
+    margin: 0
+}
+
+.b_page_files li {
+    padding: 0;
+    margin: 0
+}
+
+.projects-list > li > a {
+    font-size: 1.3em;
+}
+
+.projects-list > li > ul {
+    margin-left: 1em;
+}
+
+.projects-list a {
+    text-decoration: none;
+    color: #6f6658;
+}
+
+.projects-list > .selected > a {
+    color: #040408;
+}
+
+.projects-list > li .selected  {
+    list-style: disc;
+}
+
+.projects-list > li .selected > a {
+    color: #040408;
+}

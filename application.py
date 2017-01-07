@@ -57,10 +57,6 @@ def index():
             yield 'rst', rst
             yield 'document', saved_doc_id
 
-@app.route('/about/')
-def about():
-    return render_template('about.html')
-
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
 def rst2html():
     rst = request.form.get('rst', '')
@@ -121,7 +117,7 @@ def save_file():
     file_path = os.path.join(FILES_DIR, project, filename + '.rst')
     with open(file_path, 'w') as rst_obj:
         rst_obj.write(rst)
-    return jsonify(*get_project_files(project))
+    return jsonify(**{'files': get_project_files(project)})
 
 @app.route('/srv/load_file/', methods=['GET'])
 def load_file():
@@ -142,7 +138,12 @@ def get_project_files(project):
     project_dir = os.path.join(FILES_DIR, project)
     os.makedirs(project_dir, exist_ok=True)
     content = os.listdir(project_dir)
-    return [item[:-4] for item in content if item.endswith('.rst')]
+    return sorted([item[:-4] for item in content if item.endswith('.rst')])
+
+def get_projects():
+    os.makedirs(FILES_DIR, exist_ok=True)
+    content = os.listdir(FILES_DIR)
+    return sorted([item for item in content if os.path.isdir(os.path.join(FILES_DIR, item))])
 
 @app.route('/srv/files/', methods=['GET'])
 def files_list():
@@ -151,6 +152,10 @@ def files_list():
         return ''
 
     return jsonify(**{'files': get_project_files(project)})
+
+@app.route('/srv/projects/', methods=['GET'])
+def projects():
+    return jsonify(**{'projects': get_projects()})
 
 @app.route('/srv/del_rst/', methods=['GET'])
 def del_rst():

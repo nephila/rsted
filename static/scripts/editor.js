@@ -161,24 +161,49 @@ $(function() {
     });
 
     $.ajax({
-        'url': script_root + '/srv/files/',
+        'url': script_root + '/srv/projects/',
         'type': 'GET',
-        'data': {'project': $.urlParam('project')},
+        'data': {},
         'success': function(response) {
-            $("#project").html($.urlParam('project'));
-            for(item of response['files']) {
-                $('#file-list').append('<li>' + item + '</li>');
+            console.log(response);
+            for(item of response['projects']) {
+                selected = '';
+                if(item === $.urlParam('project')) {
+                    selected = 'class="selected"';
+                }
+                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><ul id="file-list-' + item + '" class="file-list"></ul></li>');
+            }
+            if($.urlParam('project')) {
+                $.ajax({
+                    'url': script_root + '/srv/files/',
+                    'type': 'GET',
+                    'data': {'project': $.urlParam('project')},
+                    'success': function(response) {
+                        for(item of response['files']) {
+                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a></li>');
+                        }
+                    }
+
+                });
             }
         }
-
     });
 
-    $('body').on('click', '#file-list li', function(e){
+
+    $('body').on('click', '.projects-list > li > a', function(e){
+        e.preventDefault();
+        document.location.href = script_root + '?project=' + e.target.innerHTML;
+    });
+
+    $('body').on('click', '.file-list > li > a', function(e){
+        e.preventDefault();
         $.ajax({
             'url': script_root + '/srv/load_file/',
             'type': 'GET',
             'data': {'project': $.urlParam('project'), 'filename': e.target.innerHTML},
             'success': function(response) {
+                $(e.target).parent('li').siblings().removeClass('selected');
+                $(e.target).parent('li').addClass('selected');
                 $("#filename").val(e.target.innerHTML);
                 $('textarea#editor').val(response['content']);
             }
@@ -197,8 +222,13 @@ $(function() {
             'type': 'POST',
             'data': {'rst': $('textarea#editor').val(), 'project': $.urlParam('project'), 'filename': $('#filename').val()},
             'success': function(response) {
+                $('#file-list-' + $.urlParam('project')).html('');
                 for(item of response['files']) {
-                    $('#file-list').append('<li>' + item + '</li>');
+                    selected = '';
+                    if(item === $('#filename').val()) {
+                        selected = 'class="selected"';
+                    }
+                    $('#file-list-' + $.urlParam('project')).append('<li ' + selected + ' id="file-' + item + ' " ><a href="#">' + item + '</a></li>');
                 }
             }
 

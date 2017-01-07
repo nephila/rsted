@@ -5,10 +5,8 @@
         <meta charset="UTF-8">
         <title>{% block title %}Online reStructuredText editor{% endblock %}</title>
 
-	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/base.css"/>
-	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/site.css"/>
-	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/menu.css"/>
-
+	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}css/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/overcast/jquery-ui-1.8.16.custom.css" />
 
 
@@ -19,20 +17,10 @@
         {% endblock %}
     </head>
     <body>
-        <a id="github-ribbon" href="http://github.com/ankostis/rsted">Fork me on GitHub</a>
         {% block body_head %}
         {% endblock %}
         <header id="header">
             <h1>{% block site_title %}Online reStructuredText editor{% endblock %}</h1>
-            <menu id="navigation">
-                {%- block main_nav %}
-                <ul class="menu" id="menu">
-                    <li class="{{ is_active('index') }}"><a href="{{ url_for('index') }}">Editor</a>
-                    </li>
-                    <li class="{{ is_active('about') }}"><a target="_blank" href="{{ url_for('about') }}">About</a></li>
-                </ul>
-                {% endblock -%}
-            </menu>
         </header>
         <script type="text/javascript">
             var script_root = {{ request.script_root|tojson|safe }};

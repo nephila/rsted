@@ -8,3 +8,4 @@
 /var/run
 /projects/
 log
+/node_modules/
