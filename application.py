@@ -168,6 +168,20 @@ def del_rst():
     response.headers['Content-Type'] = 'text/plain'
     return response
 
+@app.route('/srv/del_file', methods=['POST'])
+def del_file():
+    project = request.form.get('project')
+    filename = request.form.get('filename')
+    file_path = os.path.join(FILES_DIR, project, filename + '.rst')
+    if file_path:
+        try:
+            os.remove(file_path)
+        except OSError:
+            raise
+
+    response = make_response()
+    response.headers['Content-Type'] = 'text/plain'
+    return response
 
 if __name__ == '__main__':
     app.run(host=app.config.get('HOST', '0.0.0.0'),

@@ -31,6 +31,7 @@
     <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
     <li>{% if document %}
     	<a href="#" id="save" class="jslink">Save</a>
+        <a href="#" id="del_file" class="jslink">Delete File</a>
     {% else %}
     	<a href="#" id="save_link" class="jslink">Save with unique link</a>
     {% endif %}
@@ -65,6 +66,7 @@
                 <button id="as_pdf" class="jslink">Download as PDF</button>
                 <button id="save_file">Save to file</button>
                 <button id="save_link">Save with unique link</button>
+                <button id="del_file" >Delete File</button>
                 {% if document %}
                 <button id="del_link">Delete</button>
                 {% endif %}

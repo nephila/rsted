@@ -239,7 +239,6 @@ $(function() {
     });
 
     $('#save_link').click(function(e) {
-
         $.ajax({
             'url': script_root + '/srv/save_rst/',
             'type': 'POST',
@@ -255,7 +254,23 @@ $(function() {
         return false;
     });
 
+    $('#del_file').click(function(e){
+        console.log('eeeeeee')
+        $.ajax({
+            'url': script_root + '/srv/del_file',
+            'type': 'POST',
+            'data': {'rst': $('textarea#editor').val(), 'project': $.urlParam('project'), 'filename': $('#filename').val()},
+            'success': function(response) {
+                window.location = getCurrentLink();
+            }        
+        })
+
+        e.preventDefault();
+        return false;
+    });
+
     $('#del_link').click(function(e) {
+        console.log('kkkkkkkkkkk')
         $.ajax({
             'url': script_root + '/srv/del_rst/',
             'type': 'GET',
