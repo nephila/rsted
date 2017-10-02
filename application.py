@@ -170,8 +170,8 @@ def del_rst():
     response.headers['Content-Type'] = 'text/plain'
     return response
 
-@app.route('/srv/del_file/', methods=['POST'])
-def del_file():
+@app.route('/srv/delete/', methods=['POST'])
+def delete():
     project = request.form.get('project')
     filename = request.form.get('filename')
     project_path = os.path.join(FILES_DIR, project)

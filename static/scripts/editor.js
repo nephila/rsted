@@ -71,7 +71,7 @@ function delFile(nomeprogetto, nomefile){
     } else { result = confirm('Do you want delete' + " " + arguments[0]) + "?"}
     if (result) {
     $.ajax({
-        'url': script_root + '/srv/del_file/',
+        'url': script_root + '/srv/delete/',
         'type': 'POST',
         'data': {'rst': $('textarea#editor').val(), 'project': nomeprogetto, 'filename': nomefile},
         'success': function(response) {
@@ -187,7 +187,7 @@ $(function() {
                 if(item === $.urlParam('project')) {
                     selected = 'class="selected"';
                 }
-                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><button onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="del_file">X</button><ul id="file-list-' + item + '" class="file-list"></ul></li>');
+                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><button onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="delete">X</button><ul id="file-list-' + item + '" class="file-list"></ul></li>');
             }
             if($.urlParam('project')) {
                 $.ajax({
@@ -196,7 +196,7 @@ $(function() {
                     'data': {'project': $.urlParam('project')},
                     'success': function(response) {
                         for(item of response['files']) {
-                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a> <button id="delite_file" onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="del_file">X</button></li>');
+                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a> <button id="delite_file" onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="delete">X</button></li>');
                         }
                     }
 
