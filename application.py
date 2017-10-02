@@ -2,6 +2,8 @@
 # all the imports
 
 import os, sys
+import shutil
+
 try:
     reload(sys)
     sys.setdefaultencoding('utf-8')
@@ -27,7 +29,7 @@ app = Flask(__name__)
 app.config.from_pyfile(os.environ.get('RSTED_CONF', 'settings.py'))
 redis = RedisManager(app).get_instance()
 
-REDIS_EXPIRE = app.config.setdefault('REDIS_EXPIRE', 60*60*24*30*6) # Default 6 months
+REDIS_EXPIRE = app.config.setdefault('REDIS_EXPIRE', 60*60*24*30*6)# Default 6 months
 REDIS_PREFIX = app.config.setdefault('REDIS_PREFIX', 'rst_')
 FILES_DIR = app.config.setdefault('FILES_DIR', 'files')
 
@@ -54,7 +56,7 @@ def index():
         rst = redis.get('%s%s' % (REDIS_PREFIX, saved_doc_id))
         if rst:
             rst = rst.decode('utf-8')
-            yield 'rst', rst
+            yield 'rst', rsts
             yield 'document', saved_doc_id
 
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
@@ -168,16 +170,18 @@ def del_rst():
     response.headers['Content-Type'] = 'text/plain'
     return response
 
-@app.route('/srv/del_file', methods=['POST'])
+@app.route('/srv/del_file/', methods=['POST'])
 def del_file():
     project = request.form.get('project')
     filename = request.form.get('filename')
+    project_path = os.path.join(FILES_DIR, project)
     file_path = os.path.join(FILES_DIR, project, filename + '.rst')
-    if file_path:
-        try:
-            os.remove(file_path)
-        except OSError:
-            raise
+
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+        del_rst()
+    elif os.path.isdir(project_path):
+        shutil.rmtree(project_path)
 
     response = make_response()
     response.headers['Content-Type'] = 'text/plain'

@@ -65,6 +65,22 @@ function getScrollHeight($prevFrame) {
     }
 }
 
+function delFile(nomeprogetto, nomefile){
+    if (arguments[1]){ 
+        result = confirm('Do you want delete' + " " + arguments[1] + "?")
+    } else { result = confirm('Do you want delete' + " " + arguments[0]) + "?"}
+    if (result) {
+    $.ajax({
+        'url': script_root + '/srv/del_file/',
+        'type': 'POST',
+        'data': {'rst': $('textarea#editor').val(), 'project': nomeprogetto, 'filename': nomefile},
+        'success': function(response) {
+            window.location = '/'
+        }        
+    })
+    }
+}
+
 /**
  * syncScrollPosition
  *
@@ -171,7 +187,7 @@ $(function() {
                 if(item === $.urlParam('project')) {
                     selected = 'class="selected"';
                 }
-                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><ul id="file-list-' + item + '" class="file-list"></ul></li>');
+                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><button onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="del_file">X</button><ul id="file-list-' + item + '" class="file-list"></ul></li>');
             }
             if($.urlParam('project')) {
                 $.ajax({
@@ -180,7 +196,7 @@ $(function() {
                     'data': {'project': $.urlParam('project')},
                     'success': function(response) {
                         for(item of response['files']) {
-                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a></li>');
+                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a> <button id="delite_file" onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="del_file">X</button></li>');
                         }
                     }
 
@@ -228,7 +244,7 @@ $(function() {
                     if(item === $('#filename').val()) {
                         selected = 'class="selected"';
                     }
-                    $('#file-list-' + $.urlParam('project')).append('<li ' + selected + ' id="file-' + item + ' " ><a href="#">' + item + '</a></li>');
+                    $('#file-list-' + $.urlParam('project')).append('<li ' + selected + ' id="file-' + item + ' " ><a href="#" >' + item + '</a></li>');
                 }
             }
 
@@ -254,23 +270,9 @@ $(function() {
         return false;
     });
 
-    $('#del_file').click(function(e){
-        console.log('eeeeeee')
-        $.ajax({
-            'url': script_root + '/srv/del_file',
-            'type': 'POST',
-            'data': {'rst': $('textarea#editor').val(), 'project': $.urlParam('project'), 'filename': $('#filename').val()},
-            'success': function(response) {
-                window.location = getCurrentLink();
-            }        
-        })
-
-        e.preventDefault();
-        return false;
-    });
+   
 
     $('#del_link').click(function(e) {
-        console.log('kkkkkkkkkkk')
         $.ajax({
             'url': script_root + '/srv/del_rst/',
             'type': 'GET',

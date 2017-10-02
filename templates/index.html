@@ -31,7 +31,6 @@
     <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
     <li>{% if document %}
     	<a href="#" id="save" class="jslink">Save</a>
-        <a href="#" id="del_file" class="jslink">Delete File</a>
     {% else %}
     	<a href="#" id="save_link" class="jslink">Save with unique link</a>
     {% endif %}
@@ -48,7 +47,7 @@
 {% block content %}
 <div class="b_page_cont">
     <div class="b_page_files">
-        <h2 class="projects">Projects</h2>
+        <h2 id='new_progects' class="projects">Projects</h2>
         <ul id="projects-list" class="projects-list"></ul>
         <h4>Nuovo file</h4>
         <input id="filename" name="name" placeholder="filename">
@@ -66,9 +65,8 @@
                 <button id="as_pdf" class="jslink">Download as PDF</button>
                 <button id="save_file">Save to file</button>
                 <button id="save_link">Save with unique link</button>
-                <button id="del_file" >Delete File</button>
                 {% if document %}
-                <button id="del_link">Delete</button>
+                <button id="del_link">Delete unique link</button>
                 {% endif %}
             </div>
         </div>
