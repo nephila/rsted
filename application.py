@@ -56,7 +56,7 @@ def index():
         rst = redis.get('%s%s' % (REDIS_PREFIX, saved_doc_id))
         if rst:
             rst = rst.decode('utf-8')
-            yield 'rst', rsts
+            yield 'rst', rst
             yield 'document', saved_doc_id
 
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
@@ -176,12 +176,15 @@ def delete():
     filename = request.form.get('filename')
     project_path = os.path.join(FILES_DIR, project)
     file_path = os.path.join(FILES_DIR, project, filename + '.rst')
-
-    if os.path.isfile(file_path):
-        os.remove(file_path)
-        del_rst()
-    elif os.path.isdir(project_path):
-        shutil.rmtree(project_path)
+    
+    try:
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            del_rst()
+        elif os.path.isdir(project_path):
+            shutil.rmtree(project_path)
+    except OSError:
+        print('path not found')
 
     response = make_response()
     response.headers['Content-Type'] = 'text/plain'
