@@ -2,6 +2,8 @@
 # all the imports
 
 import os, sys
+import shutil
+
 try:
     reload(sys)
     sys.setdefaultencoding('utf-8')
@@ -27,7 +29,7 @@ app = Flask(__name__)
 app.config.from_pyfile(os.environ.get('RSTED_CONF', 'settings.py'))
 redis = RedisManager(app).get_instance()
 
-REDIS_EXPIRE = app.config.setdefault('REDIS_EXPIRE', 60*60*24*30*6) # Default 6 months
+REDIS_EXPIRE = app.config.setdefault('REDIS_EXPIRE', 60*60*24*30*6)# Default 6 months
 REDIS_PREFIX = app.config.setdefault('REDIS_PREFIX', 'rst_')
 FILES_DIR = app.config.setdefault('FILES_DIR', 'files')
 
@@ -168,6 +170,25 @@ def del_rst():
     response.headers['Content-Type'] = 'text/plain'
     return response
 
+@app.route('/srv/delete/', methods=['POST'])
+def delete():
+    project = request.form.get('project')
+    filename = request.form.get('filename')
+    project_path = os.path.join(FILES_DIR, project)
+    file_path = os.path.join(FILES_DIR, project, filename + '.rst')
+    
+    try:
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            del_rst()
+        elif os.path.isdir(project_path):
+            shutil.rmtree(project_path)
+    except OSError:
+        print('path not found')
+
+    response = make_response()
+    response.headers['Content-Type'] = 'text/plain'
+    return response
 
 if __name__ == '__main__':
     app.run(host=app.config.get('HOST', '0.0.0.0'),
