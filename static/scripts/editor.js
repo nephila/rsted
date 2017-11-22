@@ -65,6 +65,16 @@ function getScrollHeight($prevFrame) {
     }
 }
 
+$(document).ready(function showbutton() {
+    $('#btn-new_file').click(function(){
+       $('#filename').attr("style", "display:block");
+       $('#new-file-title').attr("style", "display:block");
+       var clicked = $(this);
+       clicked.attr("style", "display:none");
+   })
+})
+
+
 function delFile(nomeprogetto, nomefile){
     if (arguments[1]){ 
         result = confirm('Do you want delete' + " " + arguments[1] + "?")
@@ -158,6 +168,7 @@ $.urlParam = function(name){
     }
 }
 
+
 $(function() {
     //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
 
@@ -181,7 +192,6 @@ $(function() {
         'type': 'GET',
         'data': {},
         'success': function(response) {
-            console.log(response);
             for(item of response['projects']) {
                 selected = '';
                 if(item === $.urlParam('project')) {
