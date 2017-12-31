@@ -65,6 +65,41 @@ function getScrollHeight($prevFrame) {
     }
 }
 
+
+$(function startsNewFile() {
+    $('#btn-new_file').click(function(){
+       $('#filename').attr("style", "display:block");
+       $('#new-file-title').attr("style", "display:block");
+       var clicked = $(this);
+       clicked.attr("style", "display:none");
+   })
+})
+
+$(function starsNewProject () {
+    $('#btn-new-project').click(function(){
+        var clicked = $(this);
+        clicked.attr("style", "display:none");
+        $('#projectname').attr("style", "display:block");
+        $('#create-new-project').attr("style", "display:block");
+    })
+    $('#create-new-project').click(function(){
+        console.log('aaaaaaaaa')
+        var projectname = $("#projectname").val();
+        console.log(projectname)
+        /*var url = document.location.href+"/?project="+projectname;*/
+        var url =  script_root + '/?theme=' + getSelectedTheme() + '&project=' + projectname
+        console.log(url)
+        $.ajax({
+        'url': url,
+        'type': "GET",
+        'success': function(response) {
+            window.location = url;
+            }
+        })
+    })
+})
+
+
 function delFile(nomeprogetto, nomefile){
     if (arguments[1]){ 
         result = confirm('Do you want delete' + " " + arguments[1] + "?")
@@ -181,7 +216,6 @@ $(function() {
         'type': 'GET',
         'data': {},
         'success': function(response) {
-            console.log(response);
             for(item of response['projects']) {
                 selected = '';
                 if(item === $.urlParam('project')) {
