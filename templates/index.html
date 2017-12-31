@@ -48,10 +48,14 @@
 <div class="b_page_cont">
     <div class="b_page_files">
         <h2 id='new_progects' class="projects">Projects</h2>
+        <button id="btn-new-project">New Project</button>
+        <input id="projectname" type="" name="projectname" placeholder="Progect Name" style="display: none;">
+        <button id="create-new-project" style="display: none" >Create</button>
         <ul id="projects-list" class="projects-list"></ul>
         <button id="btn-new_file">New File</button>
         <h4 id="new-file-title" style="display: none">Nuovo file</h4>
         <input id="filename" name="name" placeholder="filename" style="display: none;">
+        <button id="save_file">Save to file</button>
     </div>
     <div class="b_page_left">
         <textarea id="editor" rows="15">{{ rst }}</textarea>
@@ -64,7 +68,6 @@
             </div>
             <div class="actions right">
                 <button id="as_pdf" class="jslink">Download as PDF</button>
-                <button id="save_file">Save to file</button>
                 <button id="save_link">Save with unique link</button>
                 {% if document %}
                 <button id="del_link">Delete unique link</button>

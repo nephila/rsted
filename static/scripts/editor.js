@@ -1,8 +1,6 @@
-
-
 function getSelectedTheme() {
     var theme = null;
-    $('.themes input').each(function() {
+    $('.themes input').each(function () {
         if (this.checked) {
             theme = this.value;
             return false;
@@ -15,7 +13,7 @@ function getQueryArgs(locSearch) {
     locSearch = locSearch || window.location.search;
     var args = {};
 
-    locSearch.replace(/(\w+)=(.+?)(&|$)/g, function(substr, key, value) {
+    locSearch.replace(/(\w+)=(.+?)(&|$)/g, function (substr, key, value) {
         args[key] = window.decodeURIComponent(value);
     });
     return args;
@@ -58,36 +56,59 @@ function getScrollHeight($prevFrame) {
     if ($prevFrame[0].scrollHeight !== undefined) {
         return $prevFrame[0].scrollHeight;
     } else if ($prevFrame.find('html')[0].scrollHeight !== undefined &&
-               $prevFrame.find('html')[0].scrollHeight !== 0) {
+        $prevFrame.find('html')[0].scrollHeight !== 0) {
         return $prevFrame.find('html')[0].scrollHeight;
     } else {
         return $prevFrame.find('body')[0].scrollHeight;
     }
 }
 
-$(document).ready(function showbutton() {
-    $('#btn-new_file').click(function(){
-       $('#filename').attr("style", "display:block");
-       $('#new-file-title').attr("style", "display:block");
-       var clicked = $(this);
-       clicked.attr("style", "display:none");
-   })
+
+$(function startsNewFile() {
+    $('#btn-new_file').click(function () {
+        $('#filename').attr("style", "display:block");
+        $('#new-file-title').attr("style", "display:block");
+        var clicked = $(this);
+        clicked.attr("style", "display:none");
+    })
 })
 
-
-function delFile(nomeprogetto, nomefile){
-    if (arguments[1]){ 
-        result = confirm('Do you want delete' + " " + arguments[1] + "?")
-    } else { result = confirm('Do you want delete' + " " + arguments[0]) + "?"}
-    if (result) {
-    $.ajax({
-        'url': script_root + '/srv/delete/',
-        'type': 'POST',
-        'data': {'rst': $('textarea#editor').val(), 'project': nomeprogetto, 'filename': nomefile},
-        'success': function(response) {
-            window.location = '/'
-        }        
+$(function starsNewProject() {
+    $('#btn-new-project').click(function () {
+        var clicked = $(this);
+        clicked.attr("style", "display:none");
+        $('#projectname').attr("style", "display:block");
+        $('#create-new-project').attr("style", "display:block");
     })
+    $('#create-new-project').click(function () {
+        var projectname = $("#projectname").val();
+        /*var url = document.location.href+"/?project="+projectname;*/
+        var url = script_root + '/?theme=' + getSelectedTheme() + '&project=' + projectname
+        $.ajax({
+            'url': url,
+            'type': "GET",
+            'success': function (response) {
+                window.location = url;
+            }
+        })
+    })
+})
+
+function delFile(nomeprogetto, nomefile) {
+    if (arguments[1]) {
+        result = confirm('Do you want delete' + " " + arguments[1] + "?")
+    } else {
+        result = confirm('Do you want delete' + " " + arguments[0]) + "?"
+    }
+    if (result) {
+        $.ajax({
+            'url': script_root + '/srv/delete/',
+            'type': 'POST',
+            'data': {'rst': $('textarea#editor').val(), 'project': nomeprogetto, 'filename': nomefile},
+            'success': function (response) {
+                window.location = '/'
+            }
+        })
     }
 }
 
@@ -130,10 +151,10 @@ function genPreview() {
         'url': script_root + '/srv/rst2html/',
         'data': {'rst': rstContent, 'theme': getSelectedTheme()},
         'type': 'POST',
-        'error': function(xhr) {
+        'error': function (xhr) {
             setPreviewHtml(xhr.responseText);
         },
-        'success': function(response) {
+        'success': function (response) {
             setPreviewHtml(response);
             syncScrollPosition();
             activeXhr = null;
@@ -158,31 +179,31 @@ function adjustBrowse() {
     $('#editor').height(h).css('max-height', h + 'px');
 }
 
-$.urlParam = function(name){
+$.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
+    if (results == null) {
+        return null;
     }
-    else{
-       return results[1] || 0;
+    else {
+        return results[1] || 0;
     }
 }
 
 
-$(function() {
+$(function () {
     //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
 
     window.baseTitle = $('head title').text();
 
     $('textarea#editor').bind('change', genPreview).markItUp(mySettings);
     timerId = window.setInterval(genPreview, 900);
-    window.setTimeout(function() {
+    window.setTimeout(function () {
         $('#editor-td > div').css({'width': '100%', 'height': '96%'});
     }, 200);
 
     $('textarea#editor').scroll(syncScrollPosition);
 
-    $('.themes input').bind('change', function() {
+    $('.themes input').bind('change', function () {
         lastContent = null;
         genPreview();
     });
@@ -191,22 +212,22 @@ $(function() {
         'url': script_root + '/srv/projects/',
         'type': 'GET',
         'data': {},
-        'success': function(response) {
-            for(item of response['projects']) {
+        'success': function (response) {
+            for (item of response['projects']) {
                 selected = '';
-                if(item === $.urlParam('project')) {
+                if (item === $.urlParam('project')) {
                     selected = 'class="selected"';
                 }
-                $('.projects-list').append('<li id="project-' + item + ' " '+ selected +'><a href="#">' + item + '</a><button onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="delete">X</button><ul id="file-list-' + item + '" class="file-list"></ul></li>');
+                $('.projects-list').append('<li id="project-' + item + ' " ' + selected + '><a href="#">' + item + '</a><button onclick="delFile(\'' + $.urlParam('project') + '\', \'' + item + '\')" id="delete">X</button><ul id="file-list-' + item + '" class="file-list"></ul></li>');
             }
-            if($.urlParam('project')) {
+            if ($.urlParam('project')) {
                 $.ajax({
                     'url': script_root + '/srv/files/',
                     'type': 'GET',
                     'data': {'project': $.urlParam('project')},
-                    'success': function(response) {
-                        for(item of response['files']) {
-                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a> <button id="delite_file" onclick="delFile(\'' + $.urlParam('project') +'\', \'' + item +'\')" id="delete">X</button></li>');
+                    'success': function (response) {
+                        for (item of response['files']) {
+                            $('#file-list-' + $.urlParam('project')).append('<li id="file-' + item + ' " ><a href="#">' + item + '</a> <button id="delite_file" onclick="delFile(\'' + $.urlParam('project') + '\', \'' + item + '\')" id="delete">X</button></li>');
                         }
                     }
 
@@ -216,18 +237,18 @@ $(function() {
     });
 
 
-    $('body').on('click', '.projects-list > li > a', function(e){
+    $('body').on('click', '.projects-list > li > a', function (e) {
         e.preventDefault();
         document.location.href = script_root + '?project=' + e.target.innerHTML;
     });
 
-    $('body').on('click', '.file-list > li > a', function(e){
+    $('body').on('click', '.file-list > li > a', function (e) {
         e.preventDefault();
         $.ajax({
             'url': script_root + '/srv/load_file/',
             'type': 'GET',
             'data': {'project': $.urlParam('project'), 'filename': e.target.innerHTML},
-            'success': function(response) {
+            'success': function (response) {
                 $(e.target).parent('li').siblings().removeClass('selected');
                 $(e.target).parent('li').addClass('selected');
                 $("#filename").val(e.target.innerHTML);
@@ -236,22 +257,26 @@ $(function() {
         })
     });
 
-    $('#save_file').click(function(e) {
-        if(!$('#filename').val()) {
+    $('#save_file').click(function (e) {
+        if (!$('#filename').val()) {
             alert('Provide a file name!');
         }
-        if(!$.urlParam('project')) {
+        if (!$.urlParam('project')) {
             alert('Provide a project!');
         }
         $.ajax({
             'url': script_root + '/srv/save_file/',
             'type': 'POST',
-            'data': {'rst': $('textarea#editor').val(), 'project': $.urlParam('project'), 'filename': $('#filename').val()},
-            'success': function(response) {
+            'data': {
+                'rst': $('textarea#editor').val(),
+                'project': $.urlParam('project'),
+                'filename': $('#filename').val()
+            },
+            'success': function (response) {
                 $('#file-list-' + $.urlParam('project')).html('');
-                for(item of response['files']) {
+                for (item of response['files']) {
                     selected = '';
-                    if(item === $('#filename').val()) {
+                    if (item === $('#filename').val()) {
                         selected = 'class="selected"';
                     }
                     $('#file-list-' + $.urlParam('project')).append('<li ' + selected + ' id="file-' + item + ' " ><a href="#" >' + item + '</a></li>');
@@ -264,12 +289,12 @@ $(function() {
         return false;
     });
 
-    $('#save_link').click(function(e) {
+    $('#save_link').click(function (e) {
         $.ajax({
             'url': script_root + '/srv/save_rst/',
             'type': 'POST',
             'data': {'rst': $('textarea#editor').val()},
-            'success': function(response) {
+            'success': function (response) {
                 window.location = getCurrentLink(response + '');
                 $('textarea#editor').focus();
             }
@@ -280,14 +305,13 @@ $(function() {
         return false;
     });
 
-   
 
-    $('#del_link').click(function(e) {
+    $('#del_link').click(function (e) {
         $.ajax({
             'url': script_root + '/srv/del_rst/',
             'type': 'GET',
             'data': {'n': getCurrentDocument()},
-            'success': function(response) {
+            'success': function (response) {
                 window.location = getCurrentLink();
             }
         });
@@ -296,7 +320,7 @@ $(function() {
         return false;
     });
 
-    $('#as_pdf').click(function(e) {
+    $('#as_pdf').click(function (e) {
         var form = $('#save_as_pdf');
         $('#as_pdf_rst').attr('value', $("#editor").val());
         $('#as_pdf_theme').attr('value', getSelectedTheme());
@@ -306,8 +330,8 @@ $(function() {
         return false;
     });
 
-     adjustBrowse();
+    adjustBrowse();
 
-     $(window).bind('resize', adjustBrowse);
+    $(window).bind('resize', adjustBrowse);
 
 });
